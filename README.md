@@ -1,73 +1,73 @@
 # Dot Telegram Bot
 
-This project provides a minimal example of a Telegram bot that connects
-Google's Gemini generative model with [LangGraph](https://github.com/langchain-ai/langgraph).
-The bot accepts text messages, documents and images and returns a reply
-produced by Gemini. When the reply is too large, the bot sends it back as
-a LaTeX file, which can later be converted to other formats (Docx or
-PDF). This approach ensures formulas are preserved correctly across
-formats.
+Проект представляет минимальный пример Telegram-бота, который соединяет
+генеративную модель Gemini от Google с [LangGraph](https://github.com/langchain-ai/langgraph).
+Бот принимает текстовые сообщения, документы и изображения и возвращает ответ,
+сформированный Gemini. Если ответ слишком большой, бот отправляет его в виде
+файла LaTeX, который затем можно конвертировать в другие форматы (Docx или
+PDF). Такой подход позволяет корректно сохранять формулы при конвертации.
 
-## Features
+## Возможности
 
-- **Telegram integration** using `python-telegram-bot`.
-- **Gemini API** access via `google-generativeai`.
-- **LangGraph** workflow to preprocess the input (placeholder in code).
-- Accepts **text, files and images** from the user.
-- Sends responses as **text** or **LaTeX documents** (which can be
-  converted to Docx or PDF).
-- Large files can be generated over multiple requests, allowing the bot
-  to write and verify sections before completion.
-- Image search and generation hooks can be added to the LangGraph
-  pipeline for richer document creation.
+- **Интеграция с Telegram** через `python-telegram-bot`.
+- Доступ к **Gemini API** через `google-generativeai`.
+- **LangGraph**-конвейер для предобработки входных данных (заготовка в коде).
+- Принимает от пользователя **текст, файлы и изображения**.
+- Отправляет ответы как **текст** или **документы LaTeX** (которые можно
+  конвертировать в Docx или PDF).
+- Большие документы могут собираться несколькими запросами — бот может
+  писать и проверять разделы по мере готовности.
+- В конвейер LangGraph можно добавить узлы для поиска/генерации изображений
+  для более насыщенного контента.
 
-## Installation
+## Установка
 
-1. Install dependencies:
+1. Установите зависимости:
 
    ```bash
    pip install python-telegram-bot google-generativeai langgraph
    ```
 
-2. Set environment variables:
+2. Укажите переменные окружения:
 
-   - `TELEGRAM_TOKEN` – token for your Telegram bot.
-   - `GEMINI_API_KEY` – API key for Google Gemini.
+   - `TELEGRAM_TOKEN`: токен вашего Telegram-бота.
+   - `GEMINI_API_KEY`: API-ключ для Google Gemini.
 
-3. Run the bot:
+3. Запустите бота:
 
    ```bash
    python -m bot.bot
    ```
 
-## How It Works
+## Как это работает
 
-1. A user sends a text message, document or image to the bot.
-2. The bot downloads the file if present and passes all content to the
-   Gemini model through a LangGraph pipeline.
-3. Gemini returns a text response. If the text is short, the bot sends it
-   directly in the chat. For long responses, the bot packages the text
-   into a `.tex` file so formulas are preserved. The user may convert
-   this file to Docx or PDF.
-4. The agent can create large files in multiple steps. Users may request
-   additional sections or corrections, and the bot will continue from the
-   previous content.
+1. Пользователь отправляет боту текст, документ или изображение.
+2. Бот при необходимости скачивает файл и передаёт всё содержимое в
+   модель Gemini через конвейер LangGraph.
+3. Gemini возвращает текстовый ответ. Если он короткий, бот отправляет его
+   прямо в чат. Для длинных ответов бот упаковывает текст в файл `.tex`,
+   чтобы сохранить формулы. Пользователь может конвертировать этот файл
+   в Docx или PDF.
+4. Агент может собирать большие документы по шагам. Пользователь может
+   просить добавить разделы или внести исправления — бот продолжит с уже
+   созданного содержания.
 
-## Converting LaTeX to Other Formats
+## Конвертация LaTeX в другие форматы
 
-Any generated `.tex` files can be converted locally using tools like
-`pandoc` or `latexmk`:
+Любые сгенерированные файлы `.tex` можно конвертировать локально с помощью
+инструментов вроде `pandoc` или `latexmk`:
 
 ```bash
 pandoc response.tex -o response.pdf
 pandoc response.tex -o response.docx
 ```
 
-This ensures mathematical notation remains accurate in the final
-Document.
+Это помогает сохранить корректность математической нотации в итоговом
+документе.
 
-## Notes
+## Заметки
 
-The provided implementation is intentionally minimal. Integrate LangGraph
-and add image search or generation nodes as needed for your specific
-workflow.
+Данная реализация намеренно минимальна. Интегрируйте LangGraph и добавляйте
+узлы для поиска или генерации изображений по мере необходимости под ваш
+конкретный сценарий.
+
